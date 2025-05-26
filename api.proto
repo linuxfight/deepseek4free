@@ -1,0 +1,60 @@
+syntax = "proto3";
+
+package gen;
+option go_package = "deepseek4free/internal/stub/gen";
+
+import "google/protobuf/empty.proto";
+
+message Chat {
+  string id = 1;
+  optional int32 currentMessageId = 2;
+  optional string title = 3;
+}
+
+message CompletionRequest {
+  Chat Chat = 1;
+  string prompt = 3;
+  bool think = 4;
+  bool search = 5;
+}
+
+message CompletionResponse {
+  string token = 1;
+}
+
+message QuotaResponse {
+  int32 quota = 1;
+  int32 used = 2;
+}
+
+message ChatListResponse {
+  repeated Chat Chats = 1;
+}
+
+message ChatHistoryResponse {
+  Chat Chat = 1;
+  repeated ChatMessage Messages = 2;
+}
+
+message ChatMessage {
+  int32 id = 1;
+  string role = 2;
+  string content = 3;
+}
+
+service DeepseekApi {
+  // create a new chat
+  rpc CreateChat(google.protobuf.Empty) returns (Chat);
+  // change chat name
+  rpc EditChat(Chat) returns (google.protobuf.Empty);
+  // delete a chat
+  rpc DeleteChat(Chat) returns (google.protobuf.Empty);
+  // get all chats
+  rpc GetAllChats(google.protobuf.Empty) returns (ChatListResponse);
+  // get chat messages
+  rpc GetChatHistory(Chat) returns (ChatHistoryResponse);
+  // get account quota
+  rpc GetQuota(google.protobuf.Empty) returns (QuotaResponse);
+  // chat with llm
+  rpc Completion(CompletionRequest) returns (stream CompletionResponse);
+}

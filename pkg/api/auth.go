@@ -2,7 +2,7 @@ package api
 
 import (
 	"fmt"
-	"hashTest/api/models"
+	"github.com/linuxfight/deepseek4free/pkg/api/models"
 	"net/http"
 )
 

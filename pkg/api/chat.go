@@ -2,7 +2,7 @@ package api
 
 import (
 	"fmt"
-	"hashTest/api/models"
+	"github.com/linuxfight/deepseek4free/pkg/api/models"
 	"net/http"
 )
 
@@ -36,7 +36,7 @@ func (c *Client) ChangeTitle(chatSessionId string, title string) error {
 func (c *Client) DeleteChatSession(chatSessionId string) error {
 	body := fmt.Sprintf(`{"chat_session_id":"%s"}`, chatSessionId)
 	var data models.NullResponse
-	if err := c.execute(chatEditUrl, body, http.MethodPost, &data); err != nil {
+	if err := c.execute(chatDeleteUrl, body, http.MethodPost, &data); err != nil {
 		return err
 	}
 	return nil

@@ -6,7 +6,7 @@ import (
 	"encoding/base64"
 	"fmt"
 	"github.com/bytedance/sonic"
-	"hashTest/api/models"
+	"github.com/linuxfight/deepseek4free/pkg/api/models"
 	"io"
 	"net/http"
 	"strings"
@@ -18,12 +18,6 @@ func (c *Client) unmarshal(body io.ReadCloser, val interface{}) error {
 	if err != nil {
 		return err
 	}
-	defer func(gzReader *gzip.Reader) {
-		err := gzReader.Close()
-		if err != nil {
-			panic(err)
-		}
-	}(gzReader)
 
 	bytes, err := io.ReadAll(gzReader)
 	if err != nil {
@@ -31,6 +25,10 @@ func (c *Client) unmarshal(body io.ReadCloser, val interface{}) error {
 	}
 
 	if err := sonic.Unmarshal(bytes, &val); err != nil {
+		return err
+	}
+
+	if err := gzReader.Close(); err != nil {
 		return err
 	}
 
@@ -102,9 +100,10 @@ type event struct {
 	P string      `json:"p"`
 }
 
-func parseEvents(r io.ReadCloser, tokensCh chan<- string) {
-	defer close(tokensCh)
+func parseEvents(r io.ReadCloser, tokensCh chan<- string) error {
 	scanner := bufio.NewScanner(r)
+	think := false
+	search := false
 	for scanner.Scan() {
 		line := strings.TrimSpace(scanner.Text())
 		if strings.HasPrefix(line, "event: ") {
@@ -120,12 +119,19 @@ func parseEvents(r io.ReadCloser, tokensCh chan<- string) {
 			switch ev.P {
 			case "response/search_status":
 				tokensCh <- "\n<searching>\n"
+				search = true
 				continue
 			case "response/thinking_content":
-				tokensCh <- "<searching/>\n" +
-					"\n<thinking>\n"
+				if search {
+					tokensCh <- "<searching/>\n"
+				}
+				tokensCh <- "\n<thinking>\n"
+				think = true
 			case "response/content":
-				tokensCh <- "\n</thinking>\n" + "\n<answer>\n"
+				if think {
+					tokensCh <- "\n</thinking>\n"
+				}
+				tokensCh <- "\n<answer>\n"
 			case "response/status":
 				tokensCh <- "\n</answer>"
 				continue
@@ -166,12 +172,14 @@ func parseEvents(r io.ReadCloser, tokensCh chan<- string) {
 		}
 	}
 	if err := scanner.Err(); err != nil {
-		panic("error reading input: " + err.Error())
+		return fmt.Errorf("error reading input: " + err.Error())
 	}
 	err := r.Close()
 	if err != nil {
-		panic(err)
+		return err
 	}
+	close(tokensCh)
+	return nil
 }
 
 func getString(m map[string]interface{}, key string) string {

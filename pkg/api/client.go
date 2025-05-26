@@ -1,13 +1,14 @@
 package api
 
 import (
-	"hashTest/solver"
+	"github.com/linuxfight/deepseek4free/pkg/solver"
 	"net/http"
 )
 
 const chatCreateBody = `{"agent":"chat"}`
 const authUrl = "https://chat.deepseek.com/api/v0/users/login"
 const chatCreateUrl = "https://chat.deepseek.com/api/v0/chat_session/create"
+const chatDeleteUrl = "https://chat.deepseek.com/api/v0/chat_session/delete"
 const chatEditUrl = "https://chat.deepseek.com/api/v0/chat_session/update_title"
 const chatListUrl = "https://chat.deepseek.com/api/v0/chat_session/fetch_page"
 const completionUrl = "https://chat.deepseek.com/api/v0/chat/completion"
