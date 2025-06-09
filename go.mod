@@ -7,7 +7,7 @@ require (
 	github.com/bytedance/sonic v1.13.2
 	github.com/grpc-ecosystem/go-grpc-middleware/v2 v2.3.2
 	github.com/ilyakaznacheev/cleanenv v1.5.0
-	google.golang.org/grpc v1.72.2
+	google.golang.org/grpc v1.73.0
 	google.golang.org/protobuf v1.36.6
 )
 
