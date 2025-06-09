@@ -4,7 +4,7 @@ go 1.24
 
 require (
 	github.com/bytecodealliance/wasmtime-go/v33 v33.0.0
-	github.com/bytedance/sonic v1.13.2
+	github.com/bytedance/sonic v1.13.3
 	github.com/grpc-ecosystem/go-grpc-middleware/v2 v2.3.2
 	github.com/ilyakaznacheev/cleanenv v1.5.0
 	google.golang.org/grpc v1.72.2
