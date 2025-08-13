@@ -15,7 +15,7 @@ permissions:
 jobs:
   build:
     name: build docker image
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
 
     steps:
       - name: Convert repository to lowercase
