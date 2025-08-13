@@ -172,7 +172,7 @@ func parseEvents(r io.ReadCloser, tokensCh chan<- string) error {
 		}
 	}
 	if err := scanner.Err(); err != nil {
-		return fmt.Errorf("error reading input: " + err.Error())
+		return err
 	}
 	err := r.Close()
 	if err != nil {
