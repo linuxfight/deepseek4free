@@ -38,7 +38,8 @@ jobs:
   build:
     name: Docker
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main' && steps.test.outcome == 'success'
+    if: github.ref == 'refs/heads/main'
+    needs: test
 
     steps:
       - name: Copy repository
