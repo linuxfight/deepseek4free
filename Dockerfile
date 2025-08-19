@@ -1,5 +1,5 @@
 ARG GO_VERSION=1.24
-FROM --platform=$BUILDPLATFORM golang:${GO_VERSION} AS build
+FROM --platform=$BUILDPLATFORM golang:${GO_VERSION}-alpine AS build
 WORKDIR /src
 
 RUN --mount=type=cache,target=/go/pkg/mod/ \
@@ -10,9 +10,15 @@ ARG TARGETARCH
 
 COPY . .
 
+RUN --mount=type=cache,target=/var/cache/apk \
+    apk --update add \
+        build-base \
+        && \
+        update-ca-certificates
+
 RUN --mount=type=cache,target=/go/pkg/mod/ \
     --mount=type=bind,target=. \
-    CGO_ENABLED=0 GOARCH=$TARGETARCH go build -o /bin/server ./cmd/main.go
+    CGO_ENABLED=1 GOARCH=$TARGETARCH go build -o /bin/server ./cmd/main.go
 
 FROM alpine:latest AS final
 
