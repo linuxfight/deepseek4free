@@ -7,18 +7,23 @@ RUN --mount=type=cache,target=/go/pkg/mod/ \
     go mod download -x
 
 ARG TARGETARCH
-
-COPY . .
+ARG TARGETOS
 
 RUN --mount=type=cache,target=/var/cache/apk \
     apk --update add \
         build-base \
+        gcc-aarch64-linux-gnu \
+        binutils-aarch64-linux-gnu \
         && \
         update-ca-certificates
 
-RUN --mount=type=cache,target=/go/pkg/mod/ \
-    --mount=type=bind,target=. \
-    CGO_ENABLED=1 GOARCH=$TARGETARCH go build -o /bin/server ./cmd/main.go
+COPY . .
+
+RUN if [ "$TARGETARCH" = "arm64" ]; then \
+        export CC=aarch64-linux-gnu-gcc \
+        CXX=aarch64-linux-gnu-g++; \
+    fi; \
+    CGO_ENABLED=1 GOARCH=$TARGETARCH GOOS=$TARGETOS go build -o /bin/server ./cmd/main.go
 
 FROM alpine:latest AS final
 
@@ -42,7 +47,6 @@ RUN adduser \
 USER appuser
 
 COPY --from=build /src/docs /docs
-
 COPY --from=build /bin/server /bin/
 
 EXPOSE 8080
