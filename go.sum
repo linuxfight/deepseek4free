@@ -1,5 +1,7 @@
 github.com/bytecodealliance/wasmtime-go/v33 v33.0.0 h1:4G7TVmR9QdTDXeGDeo+8vMsv7c3szvV299uFUpyUSXY=
 github.com/bytecodealliance/wasmtime-go/v33 v33.0.0/go.mod h1:TOAKW0do1AEO86oplo66qYM08Kbl3FPxQlqVTDtzf08=
+github.com/bytecodealliance/wasmtime-go/v35 v35.0.0 h1:FWG9laIbe0Iz+S91zIfqTYgF51sWvkF6z29fYSDfEeI=
+github.com/bytecodealliance/wasmtime-go/v35 v35.0.0/go.mod h1:NGaP17Y+TBO8ct8f84tau8h+MBcv8StsD28/9KYGKDY=
 github.com/bytedance/sonic v1.14.0 h1:/OfKt8HFw0kh2rj8N0F6C/qPGRESq0BbaNZgcNXXzQQ=
 github.com/bytedance/sonic v1.14.0/go.mod h1:WoEbx8WTcFJfzCe0hbmyTGrfjt8PzNEBdxlNUO24NhA=
 github.com/bytedance/sonic/loader v0.1.1/go.mod h1:ncP89zfokxS5LZrJxl5z0UJcsk4M4yY2JpfqGeCtNLU=

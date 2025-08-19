@@ -7,7 +7,7 @@ import (
 	"fmt"
 	"math"
 
-	"github.com/bytecodealliance/wasmtime-go/v33"
+	"github.com/bytecodealliance/wasmtime-go/v35"
 )
 
 type Solver struct {
