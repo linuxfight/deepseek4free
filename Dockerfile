@@ -33,7 +33,6 @@ RUN adduser --disabled-password --gecos "" --home "/nonexistent" \
     --shell "/sbin/nologin" --no-create-home --uid "${UID}" appuser
 USER appuser
 
-COPY --from=build /src/docs /docs
 COPY --from=build /bin/server /bin/
 
 EXPOSE 8080
