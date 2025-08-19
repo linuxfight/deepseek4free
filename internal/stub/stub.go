@@ -2,7 +2,6 @@ package stub
 
 import (
 	"github.com/grpc-ecosystem/go-grpc-middleware/v2/interceptors/recovery"
-	"github.com/linuxfight/deepseek4free/internal/config"
 	"github.com/linuxfight/deepseek4free/internal/stub/gen"
 	"github.com/linuxfight/deepseek4free/pkg/api"
 	"github.com/linuxfight/deepseek4free/pkg/solver"
@@ -13,7 +12,6 @@ import (
 type Stub struct {
 	gen.UnimplementedDeepseekApiServer
 
-	config     *config.Config
 	server     *grpc.Server
 	api        *api.Client
 	wasmSolver *solver.Solver
@@ -35,14 +33,13 @@ func (stub *Stub) Stop() {
 	stub.wasmSolver.Close()
 }
 
-func New(config *config.Config, api *api.Client, wasmSolver *solver.Solver) *Stub {
+func New(api *api.Client, wasmSolver *solver.Solver) *Stub {
 	server := grpc.NewServer(
 		grpc.UnaryInterceptor(recovery.UnaryServerInterceptor()),
 	)
 	stub := &Stub{
 		api:        api,
 		wasmSolver: wasmSolver,
-		config:     config,
 		server:     server,
 	}
 	gen.RegisterDeepseekApiServer(server, stub)

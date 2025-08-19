@@ -1,43 +1,56 @@
 package main
 
 import (
-	"github.com/linuxfight/deepseek4free/internal/config"
-	"github.com/linuxfight/deepseek4free/internal/stub"
-	"github.com/linuxfight/deepseek4free/pkg/api"
+	"github.com/linuxfight/deepseek4free/internal/application"
 	"github.com/linuxfight/deepseek4free/pkg/solver"
+	"go.uber.org/zap"
+	"os"
+	"os/signal"
+	"syscall"
 )
 
 func main() {
-	cfg, err := config.New()
+	logger, err := zap.NewProduction()
 	if err != nil {
 		panic(err)
 	}
+
+	logger.Info("logger initialized")
 
 	wasmSolver, err := solver.New()
 	if err != nil {
 		panic(err)
 	}
 
-	apiClient := api.New(wasmSolver, cfg.RangersId, cfg.ApiKey)
+	logger.Info("wasm solver initialized")
 
-	server := stub.New(cfg, apiClient, wasmSolver)
+	app := application.New(wasmSolver, logger)
+	app.Init()
 
-	/*
-		sigChan := make(chan os.Signal, 1)
-		signal.Notify(sigChan, syscall.SIGINT, syscall.SIGTERM)
+	logger.Info("app initialized")
 
-		go func() {
+	// TODO: context, get all messages from dialog and give llm only the final messages, make it answer the last question
+	// TODO 2: add logs, traces, metrics
 
-		}()
+	sigChan := make(chan os.Signal, 1)
+	signal.Notify(sigChan, syscall.SIGINT, syscall.SIGTERM)
 
-		<-sigChan
+	go func() {
+		logger.Info("application started on port 8080")
+		err := app.Start()
+		if err != nil {
+			stopErr := app.Stop()
+			if stopErr != nil {
+				return
+			}
+			panic(err)
+		}
+	}()
 
-		server.Stop()
-	*/
+	<-sigChan
 
-	println("server started on :9090")
-	if err := server.Listen(); err != nil {
-		server.Stop()
-		println(err.Error())
+	err = app.Stop()
+	if err != nil {
+		panic(err)
 	}
 }

@@ -1,0 +1,11 @@
+services:
+  proxy:
+    image: github.com/linuxfight/deepseek4free:latest
+    ports:
+      - "8080:8080"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+    restart: always

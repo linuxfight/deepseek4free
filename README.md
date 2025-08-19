@@ -1,3 +1,5 @@
 # R1 API
 
-Use only as a gRPC service
+Reversed Deepseek R1 API
+
+Is compatible with OpenAI API based clients

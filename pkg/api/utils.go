@@ -48,7 +48,6 @@ func (c *Client) applyHeaders(req *http.Request, bodyLen int) {
 	req.Header.Set("Accept", "application/json")
 	req.Header.Set("Accept-Encoding", "gzip")
 	req.Header.Set("Accept-Charset", "UTF-8")
-	req.Header.Set("X-Rangers-Id", c.rangersId)
 	req.Header.Set("X-Client-Locale", "en")
 	req.Header.Set("X-Client-Version", "1.2.1")
 	req.Header.Set("X-Client-Platform", "android")
@@ -118,22 +117,24 @@ func parseEvents(r io.ReadCloser, tokensCh chan<- string) error {
 		if ev.P != "" {
 			switch ev.P {
 			case "response/search_status":
-				tokensCh <- "\n<searching>\n"
+				if !search {
+					tokensCh <- "\n<thinking>\n"
+				}
 				search = true
 				continue
 			case "response/thinking_content":
-				if search {
-					tokensCh <- "<searching/>\n"
+				if !search {
+					tokensCh <- "\n<thinking>\n"
 				}
-				tokensCh <- "\n<thinking>\n"
+				tokensCh <- "\n\n"
 				think = true
 			case "response/content":
 				if think {
 					tokensCh <- "\n</thinking>\n"
 				}
-				tokensCh <- "\n<answer>\n"
+				// tokensCh <- "\n<answer>\n"
 			case "response/status":
-				tokensCh <- "\n</answer>"
+				// tokensCh <- "\n</answer>"
 				continue
 			}
 		}

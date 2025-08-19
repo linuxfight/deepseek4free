@@ -1,11 +1,10 @@
-name: build docker image
+name: test and build
 on:
   push:
     paths-ignore:
       - .gitignore
       - README.md
       - compose.yml
-      - .env
   pull_request:
 
 permissions:
@@ -17,24 +16,33 @@ env:
   IMAGE_NAME: ${{ github.repository }}
 
 jobs:
-  build:
-    name: build docker image
+  test:
+    name: Test
     runs-on: ubuntu-latest
 
     steps:
-      - name: Convert repository to lowercase
-        id: lowercase
-        run: |
-          lowercase_repo=$(echo "${{ github.repository }}" | tr '[:upper:]' '[:lower:]')
-          echo "repository=$lowercase_repo" >> $GITHUB_OUTPUT
-
       - name: Copy repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Set up Go
         uses: actions/setup-go@v5
         with:
           go-version: stable
+
+      - name: Run golangci-lint
+        uses: golangci/golangci-lint-action@v8
+        with:
+          version: v2.1
+          working-directory: .
+
+  build:
+    name: Docker
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+
+    steps:
+      - name: Copy repository
+        uses: actions/checkout@v5
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
@@ -45,15 +53,6 @@ jobs:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Run golangci-lint
-        uses: golangci/golangci-lint-action@v8
-        with:
-          version: v2.1
-          working-directory: .
-
-      - name: Run tests
-        run: go test -v ./...
 
       - name: Extract metadata (tags, labels) for Docker
         id: meta

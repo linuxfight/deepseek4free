@@ -39,6 +39,6 @@ COPY --from=build /src/docs /docs
 
 COPY --from=build /bin/server /bin/
 
-EXPOSE 9090
+EXPOSE 8080
 
 ENTRYPOINT [ "/bin/server" ]

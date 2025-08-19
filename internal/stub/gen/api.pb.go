@@ -56,7 +56,7 @@ func (x *Chat) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use Chat.ProtoReflect.Descriptor instead.
+// Deprecated: Use chat.ProtoReflect.Descriptor instead.
 func (*Chat) Descriptor() ([]byte, []int) {
 	return file_api_proto_rawDescGZIP(), []int{0}
 }
@@ -84,7 +84,7 @@ func (x *Chat) GetTitle() string {
 
 type CompletionRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Chat          *Chat                  `protobuf:"bytes,1,opt,name=Chat,proto3" json:"Chat,omitempty"`
+	Chat          *Chat                  `protobuf:"bytes,1,opt,name=chat,proto3" json:"chat,omitempty"`
 	Prompt        string                 `protobuf:"bytes,3,opt,name=prompt,proto3" json:"prompt,omitempty"`
 	Think         bool                   `protobuf:"varint,4,opt,name=think,proto3" json:"think,omitempty"`
 	Search        bool                   `protobuf:"varint,5,opt,name=search,proto3" json:"search,omitempty"`
@@ -292,7 +292,7 @@ func (x *ChatListResponse) GetChats() []*Chat {
 
 type ChatHistoryResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Chat          *Chat                  `protobuf:"bytes,1,opt,name=Chat,proto3" json:"Chat,omitempty"`
+	Chat          *Chat                  `protobuf:"bytes,1,opt,name=chat,proto3" json:"chat,omitempty"`
 	Messages      []*ChatMessage         `protobuf:"bytes,2,rep,name=Messages,proto3" json:"Messages,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -434,12 +434,12 @@ const file_api_proto_rawDesc = "" +
 	"\acontent\x18\x03 \x01(\tR\acontent2\x8c\x03\n" +
 	"\vDeepseekApi\x12/\n" +
 	"\n" +
-	"CreateChat\x12\x16.google.protobuf.Empty\x1a\t.gen.Chat\x12-\n" +
-	"\bEditChat\x12\t.gen.Chat\x1a\x16.google.protobuf.Empty\x12/\n" +
+	"CreateChat\x12\x16.google.protobuf.Empty\x1a\t.gen.chat\x12-\n" +
+	"\bEditChat\x12\t.gen.chat\x1a\x16.google.protobuf.Empty\x12/\n" +
 	"\n" +
-	"DeleteChat\x12\t.gen.Chat\x1a\x16.google.protobuf.Empty\x12<\n" +
+	"DeleteChat\x12\t.gen.chat\x1a\x16.google.protobuf.Empty\x12<\n" +
 	"\vGetAllChats\x12\x16.google.protobuf.Empty\x1a\x15.gen.ChatListResponse\x125\n" +
-	"\x0eGetChatHistory\x12\t.gen.Chat\x1a\x18.gen.ChatHistoryResponse\x126\n" +
+	"\x0eGetChatHistory\x12\t.gen.chat\x1a\x18.gen.ChatHistoryResponse\x126\n" +
 	"\bGetQuota\x12\x16.google.protobuf.Empty\x1a\x12.gen.QuotaResponse\x12?\n" +
 	"\n" +
 	"Completion\x12\x16.gen.CompletionRequest\x1a\x17.gen.CompletionResponse0\x01B!Z\x1fdeepseek4free/internal/stub/genb\x06proto3"
@@ -458,7 +458,7 @@ func file_api_proto_rawDescGZIP() []byte {
 
 var file_api_proto_msgTypes = make([]protoimpl.MessageInfo, 7)
 var file_api_proto_goTypes = []any{
-	(*Chat)(nil),                // 0: gen.Chat
+	(*Chat)(nil),                // 0: gen.chat
 	(*CompletionRequest)(nil),   // 1: gen.CompletionRequest
 	(*CompletionResponse)(nil),  // 2: gen.CompletionResponse
 	(*QuotaResponse)(nil),       // 3: gen.QuotaResponse
@@ -468,18 +468,18 @@ var file_api_proto_goTypes = []any{
 	(*emptypb.Empty)(nil),       // 7: google.protobuf.Empty
 }
 var file_api_proto_depIdxs = []int32{
-	0,  // 0: gen.CompletionRequest.Chat:type_name -> gen.Chat
-	0,  // 1: gen.ChatListResponse.Chats:type_name -> gen.Chat
-	0,  // 2: gen.ChatHistoryResponse.Chat:type_name -> gen.Chat
+	0,  // 0: gen.CompletionRequest.chat:type_name -> gen.chat
+	0,  // 1: gen.ChatListResponse.Chats:type_name -> gen.chat
+	0,  // 2: gen.ChatHistoryResponse.chat:type_name -> gen.chat
 	6,  // 3: gen.ChatHistoryResponse.Messages:type_name -> gen.ChatMessage
 	7,  // 4: gen.DeepseekApi.CreateChat:input_type -> google.protobuf.Empty
-	0,  // 5: gen.DeepseekApi.EditChat:input_type -> gen.Chat
-	0,  // 6: gen.DeepseekApi.DeleteChat:input_type -> gen.Chat
+	0,  // 5: gen.DeepseekApi.EditChat:input_type -> gen.chat
+	0,  // 6: gen.DeepseekApi.DeleteChat:input_type -> gen.chat
 	7,  // 7: gen.DeepseekApi.GetAllChats:input_type -> google.protobuf.Empty
-	0,  // 8: gen.DeepseekApi.GetChatHistory:input_type -> gen.Chat
+	0,  // 8: gen.DeepseekApi.GetChatHistory:input_type -> gen.chat
 	7,  // 9: gen.DeepseekApi.GetQuota:input_type -> google.protobuf.Empty
 	1,  // 10: gen.DeepseekApi.Completion:input_type -> gen.CompletionRequest
-	0,  // 11: gen.DeepseekApi.CreateChat:output_type -> gen.Chat
+	0,  // 11: gen.DeepseekApi.CreateChat:output_type -> gen.chat
 	7,  // 12: gen.DeepseekApi.EditChat:output_type -> google.protobuf.Empty
 	7,  // 13: gen.DeepseekApi.DeleteChat:output_type -> google.protobuf.Empty
 	4,  // 14: gen.DeepseekApi.GetAllChats:output_type -> gen.ChatListResponse
