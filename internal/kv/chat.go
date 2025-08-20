@@ -35,7 +35,7 @@ func (c *ChatData) Deserialize(text string) error {
 
 func (i *Instance) GetChatData(ctx context.Context, token, title string) (*ChatData, error) {
 	h := fnv.New64a()
-	_, err := fmt.Fprint(h, []byte(token+";"+title))
+	_, err := h.Write([]byte(token + ";" + title))
 	if err != nil {
 		return nil, err
 	}
@@ -64,7 +64,7 @@ func (i *Instance) GetChatData(ctx context.Context, token, title string) (*ChatD
 
 func (i *Instance) SetChatData(ctx context.Context, token, title string, data *ChatData) error {
 	h := fnv.New64a()
-	_, err := fmt.Fprint(h, []byte(token+";"+title))
+	_, err := h.Write([]byte(token + ";" + title))
 	if err != nil {
 		return err
 	}

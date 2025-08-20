@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"strconv"
 	"strings"
+	"time"
 )
 
 func (i *Instance) chat(ctx echo.Context) error {
@@ -35,7 +36,7 @@ func (i *Instance) chat(ctx echo.Context) error {
 			return ctx.JSON(http.StatusBadRequest, map[string]string{"error": err.Error()})
 		}
 	} else {
-		if chatData.CurrentMessageId == "" || chatData.CurrentMessageId == "null" {
+		if chatData.CurrentMessageId == "" {
 			chatData.CurrentMessageId = "0"
 		}
 		msgId, err := strconv.Atoi(chatData.CurrentMessageId)
@@ -49,19 +50,12 @@ func (i *Instance) chat(ctx echo.Context) error {
 	defer func(apiClient *api.Client, chatSessionId string) {
 		text := req.Messages[0].Content
 		// This stuff is here, because chat title requests cannot be handled with markdown, fuck this
-		/*
-			if strings.HasPrefix(text, "### Task:\nGenerate a concise, 3-5 word") {
-					text = "title_req_" + strconv.FormatInt(time.Now().Unix(), 10)
-				} else if strings.HasPrefix(text, "### Task:\nSuggest 3-5") {
-					text = "follow_req_" + strconv.FormatInt(time.Now().Unix(), 10)
-				} else if strings.HasPrefix(text, "### Task:\nGenerate 1-3 broad") {
-					text = "tags_req_" + strconv.FormatInt(time.Now().Unix(), 10)
-				}
-		*/
-
-		err := apiClient.ChangeTitle(chatSessionId, text)
-		if err != nil {
-			panic(err)
+		if strings.HasPrefix(text, "### Task:\nGenerate a concise, 3-5 word") {
+			text = "title_req_" + strconv.FormatInt(time.Now().Unix(), 10)
+		} else if strings.HasPrefix(text, "### Task:\nSuggest 3-5") {
+			text = "follow_req_" + strconv.FormatInt(time.Now().Unix(), 10)
+		} else if strings.HasPrefix(text, "### Task:\nGenerate 1-3 broad") {
+			text = "tags_req_" + strconv.FormatInt(time.Now().Unix(), 10)
 		}
 
 		err = i.cache.SetChatData(ctx.Request().Context(), apiKey, req.Messages[0].Content, chatData)

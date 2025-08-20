@@ -95,3 +95,12 @@ type ChatListResponse struct {
 		} `json:"biz_data"`
 	} `json:"data"`
 }
+
+type CompletionData struct {
+	ChatSessionId   string   `json:"chat_session_id"`
+	ParentMessageId *int     `json:"parent_message_id"`
+	Prompt          string   `json:"prompt"`
+	RefFileIds      []string `json:"ref_file_ids"`
+	ThinkingEnabled bool     `json:"thinking_enabled"`
+	SearchEnabled   bool     `json:"search_enabled"`
+}
