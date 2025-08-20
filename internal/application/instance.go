@@ -4,6 +4,7 @@ import (
 	"context"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
+	"github.com/linuxfight/deepseek4free/internal/kv"
 	"github.com/linuxfight/deepseek4free/internal/loggerware"
 	"github.com/linuxfight/deepseek4free/internal/serializer"
 	"github.com/linuxfight/deepseek4free/pkg/solver"
@@ -13,17 +14,15 @@ import (
 
 type Instance struct {
 	router *echo.Echo
-
-	solver *solver.Solver
+	solver *solver.Instance
+	cache  *kv.Instance
 }
 
 func (i *Instance) Init() {
 	i.router.GET("/", func(c echo.Context) error {
 		return c.String(http.StatusOK, "started")
 	})
-
 	i.router.GET("/models", i.models)
-
 	i.router.POST("/chat/completions", i.chat)
 }
 
@@ -32,10 +31,12 @@ func (i *Instance) Start() error {
 }
 
 func (i *Instance) Stop() error {
+	i.cache.Close()
+	i.solver.Close()
 	return i.router.Shutdown(context.Background())
 }
 
-func New(solver *solver.Solver, logger *zap.Logger) *Instance {
+func New(solver *solver.Instance, logger *zap.Logger, cache *kv.Instance) *Instance {
 	router := echo.New()
 
 	router.HideBanner = true
@@ -50,5 +51,6 @@ func New(solver *solver.Solver, logger *zap.Logger) *Instance {
 	return &Instance{
 		router: router,
 		solver: solver,
+		cache:  cache,
 	}
 }

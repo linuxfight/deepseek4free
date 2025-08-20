@@ -1,6 +1,6 @@
 services:
   proxy:
-    image: github.com/linuxfight/deepseek4free:latest
+    image: ghcr.io/linuxfight/deepseek4free:main
     ports:
       - "8080:8080"
     healthcheck:

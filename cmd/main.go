@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/linuxfight/deepseek4free/internal/application"
+	"github.com/linuxfight/deepseek4free/internal/kv"
 	"github.com/linuxfight/deepseek4free/pkg/solver"
 	"go.uber.org/zap"
 	"os"
@@ -17,19 +18,23 @@ func main() {
 
 	logger.Info("logger initialized")
 
+	cache, err := kv.New()
+	if err != nil {
+		logger.Fatal("failed to initialize cache", zap.Error(err))
+	}
+
 	wasmSolver, err := solver.New()
 	if err != nil {
-		panic(err)
+		logger.Fatal("failed to initialize wasm solver", zap.Error(err))
 	}
 
 	logger.Info("wasm solver initialized")
 
-	app := application.New(wasmSolver, logger)
+	app := application.New(wasmSolver, logger, cache)
 	app.Init()
 
 	logger.Info("app initialized")
 
-	// TODO: context, get all messages from dialog and give llm only the final messages, make it answer the last question
 	// TODO 2: add logs, traces, metrics
 
 	sigChan := make(chan os.Signal, 1)
@@ -41,9 +46,9 @@ func main() {
 		if err != nil {
 			stopErr := app.Stop()
 			if stopErr != nil {
-				return
+				logger.Fatal("failed to stop application", zap.Error(stopErr))
 			}
-			panic(err)
+			logger.Fatal("application stopped", zap.Error(err))
 		}
 	}()
 
@@ -51,6 +56,8 @@ func main() {
 
 	err = app.Stop()
 	if err != nil {
-		panic(err)
+		logger.Fatal("failed to stop application", zap.Error(err))
 	}
+
+	logger.Info("application stopped")
 }

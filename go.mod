@@ -5,11 +5,8 @@ go 1.24
 require (
 	github.com/bytecodealliance/wasmtime-go/v35 v35.0.0
 	github.com/bytedance/sonic v1.14.0
-	github.com/grpc-ecosystem/go-grpc-middleware/v2 v2.3.2
 	github.com/labstack/echo/v4 v4.13.4
 	go.uber.org/zap v1.27.0
-	google.golang.org/grpc v1.72.2
-	google.golang.org/protobuf v1.36.6
 )
 
 require (
@@ -20,6 +17,7 @@ require (
 	github.com/mattn/go-colorable v0.1.14 // indirect
 	github.com/mattn/go-isatty v0.0.20 // indirect
 	github.com/twitchyliquid64/golang-asm v0.15.1 // indirect
+	github.com/valkey-io/valkey-go v1.0.64 // indirect
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
 	github.com/valyala/fasttemplate v1.2.2 // indirect
 	go.uber.org/multierr v1.10.0 // indirect
@@ -29,5 +27,4 @@ require (
 	golang.org/x/sys v0.33.0 // indirect
 	golang.org/x/text v0.25.0 // indirect
 	golang.org/x/time v0.11.0 // indirect
-	google.golang.org/genproto/googleapis/rpc v0.0.0-20250519155744-55703ea1f237 // indirect
 )

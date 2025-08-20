@@ -10,7 +10,7 @@ import (
 	"github.com/bytecodealliance/wasmtime-go/v35"
 )
 
-type Solver struct {
+type Instance struct {
 	store    *wasmtime.Store
 	memory   *wasmtime.Memory
 	instance *wasmtime.Instance
@@ -26,7 +26,7 @@ type Solver struct {
 //go:embed sha3_wasm_bg.7b9ca65ddd.wasm
 var wasmBytes []byte
 
-func New() (*Solver, error) {
+func New() (*Instance, error) {
 	engine := wasmtime.NewEngine()
 
 	module, err := wasmtime.NewModule(engine, wasmBytes)
@@ -71,7 +71,7 @@ func New() (*Solver, error) {
 	}
 	solveFn := solve.Func()
 
-	s := &Solver{}
+	s := &Instance{}
 
 	s.memory = memory
 	s.store = store
@@ -86,53 +86,53 @@ func New() (*Solver, error) {
 	return s, nil
 }
 
-func (s *Solver) Close() {
-	s.store.Close()
-	s.solve.Close()
-	s.alloc.Close()
-	s.stackPtr.Close()
+func (i *Instance) Close() {
+	i.store.Close()
+	i.solve.Close()
+	i.alloc.Close()
+	i.stackPtr.Close()
 }
 
-func (s *Solver) writeToMemory(text string) (int32, int32, error) {
+func (i *Instance) writeToMemory(text string) (int32, int32, error) {
 	textBytes := []byte(text)
 	length := int32(len(textBytes))
 
 	// Allocate memory
-	result, err := s.allocFn.Call(s.store, length, 1)
+	result, err := i.allocFn.Call(i.store, length, 1)
 	if err != nil {
 		return 0, 0, fmt.Errorf("allocation failed: %w", err)
 	}
 	ptr := result.(int32)
 
 	// Write to memory
-	mem := s.memory.UnsafeData(s.store)
+	mem := i.memory.UnsafeData(i.store)
 	copy(mem[ptr:ptr+length], textBytes)
 
 	return ptr, length, nil
 }
 
-func (s *Solver) CalculateHash(challenge, salt string, difficulty, expireAt int) (int64, error) {
+func (i *Instance) CalculateHash(challenge, salt string, difficulty, expireAt int) (int64, error) {
 	prefix := fmt.Sprintf("%s_%d_", salt, expireAt)
 
-	retptrRaw, err := s.stackPtrFn.Call(s.store, -16)
+	retptrRaw, err := i.stackPtrFn.Call(i.store, -16)
 	if err != nil {
 		return 0, fmt.Errorf("stack pointer adjustment failed: %w", err)
 	}
 	retptr := retptrRaw.(int32)
 
 	// Write challenge and prefix to memory
-	challengePtr, challengeLen, err := s.writeToMemory(challenge)
+	challengePtr, challengeLen, err := i.writeToMemory(challenge)
 	if err != nil {
 		return 0, fmt.Errorf("challenge write failed: %w", err)
 	}
 
-	prefixPtr, prefixLen, err := s.writeToMemory(prefix)
+	prefixPtr, prefixLen, err := i.writeToMemory(prefix)
 	if err != nil {
 		return 0, fmt.Errorf("prefix write failed: %w", err)
 	}
 
 	// Get solve function
-	_, err = s.solveFn.Call(s.store,
+	_, err = i.solveFn.Call(i.store,
 		retptr,
 		challengePtr,
 		challengeLen,
@@ -145,7 +145,7 @@ func (s *Solver) CalculateHash(challenge, salt string, difficulty, expireAt int)
 	}
 
 	// Read result from memory
-	mem := s.memory.UnsafeData(s.store)
+	mem := i.memory.UnsafeData(i.store)
 	status := binary.LittleEndian.Uint32(mem[retptr : retptr+4])
 
 	if status == 0 {
@@ -156,11 +156,11 @@ func (s *Solver) CalculateHash(challenge, salt string, difficulty, expireAt int)
 	value := binary.LittleEndian.Uint64(valueBytes)
 	floatValue := math.Float64frombits(value) // Convert bytes to float64
 
-	// Convert float to integer (matches Python's int() behavior)
+	// Convert float to integer (matches Python'i int() behavior)
 	answer := int64(floatValue)
 
 	// Reset stackPtr pointer
-	_, err = s.stackPtrFn.Call(s.store, 16)
+	_, err = i.stackPtrFn.Call(i.store, 16)
 	if err != nil {
 		return 0, fmt.Errorf("stackPtr pointer reset failed: %w", err)
 	}

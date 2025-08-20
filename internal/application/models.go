@@ -6,7 +6,7 @@ import (
 	"net/http"
 )
 
-func (i *Instance) models(c echo.Context) error {
+func (i *Instance) models(ctx echo.Context) error {
 	models := map[string]interface{}{
 		"object": "list",
 		"data": []dto.Model{
@@ -17,5 +17,5 @@ func (i *Instance) models(c echo.Context) error {
 			},
 		},
 	}
-	return c.JSON(http.StatusOK, models)
+	return ctx.JSON(http.StatusOK, models)
 }

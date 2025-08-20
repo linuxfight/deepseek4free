@@ -1,0 +1,38 @@
+volumes:
+  valkey_data:
+
+services:
+  cache:
+    image: valkey/valkey:alpine
+    ports:
+      - "127.0.0.1:6379:6379"
+    restart: always
+    volumes:
+      - valkey_data:/data
+    command: >
+      sh -c '
+        mkdir -p /usr/local/etc/valkey &&
+        echo "bind 0.0.0.0" > /usr/local/etc/valkey/valkey.conf &&
+        echo "appendonly yes" >> /usr/local/etc/valkey/valkey.conf &&
+        echo "appendfsync everysec" >> /usr/local/etc/valkey/valkey.conf &&
+        echo "databases 1" >> /usr/local/etc/valkey/valkey.conf &&
+        echo "save 300 10" >> /usr/local/etc/valkey/valkey.conf &&
+        echo "maxmemory 1gb" >> /usr/local/etc/valkey/valkey.conf &&
+        echo "maxmemory-policy allkeys-lru" >> /usr/local/etc/valkey/valkey.conf &&
+        echo "maxclients 10000" >> /usr/local/etc/valkey/valkey.conf &&
+        echo "tcp-backlog 511" >> /usr/local/etc/valkey/valkey.conf &&
+        echo "lazyfree-lazy-server-del yes" >> /usr/local/etc/valkey/valkey.conf &&
+        echo "user default on nopass ~* +@all" > /usr/local/etc/valkey/users.acl &&
+        valkey-server /usr/local/etc/valkey/valkey.conf --aclfile /usr/local/etc/valkey/users.acl
+      '
+    healthcheck:
+      test: [ "CMD", "valkey-cli", "ping" ]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    ulimits:
+      nofile:
+        soft: 65535
+        hard: 65535
+    sysctls:
+      net.core.somaxconn: "511"

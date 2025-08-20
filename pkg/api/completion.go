@@ -40,9 +40,11 @@ func (c *Client) Completion(chatSessionId, parentMessage, prompt string, think, 
 
 	var parseError error
 
-	go func() {
-		parseError = parseEvents(resp.Body, response)
-	}()
+	if resp != nil {
+		go func() {
+			parseError = parseEvents(resp.Body, response)
+		}()
+	}
 
 	return parseError
 }

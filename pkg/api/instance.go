@@ -20,12 +20,12 @@ const quotaUrl = "https://chat.deepseek.com/api/v0/users/feature_quota"
 
 type Client struct {
 	ApiKey     string
-	powSolver  *solver.Solver
+	powSolver  *solver.Instance
 	httpClient *http.Client
 }
 
 // New is a method to create a new DeepSeek mobile API client. If ApiKey is "", you would need to log in.
-func New(powSolver *solver.Solver, apiKey string) *Client {
+func New(powSolver *solver.Instance, apiKey string) *Client {
 	return &Client{
 		ApiKey:     apiKey,
 		powSolver:  powSolver,

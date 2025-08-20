@@ -10,7 +10,7 @@ import (
 	"time"
 )
 
-func handleNonStreaming(c echo.Context, req dto.ChatCompletionRequest, data chan string) error {
+func handleNonStreaming(ctx echo.Context, req dto.ChatCompletionRequest, data chan string) error {
 	answer := ""
 
 	for msg := range data {
@@ -33,15 +33,15 @@ func handleNonStreaming(c echo.Context, req dto.ChatCompletionRequest, data chan
 			},
 		},
 	}
-	return c.JSON(http.StatusOK, response)
+	return ctx.JSON(http.StatusOK, response)
 }
 
-func handleStreaming(c echo.Context, req dto.ChatCompletionRequest, data chan string) error {
-	c.Response().Header().Set(echo.HeaderContentType, "text/event-stream")
-	c.Response().Header().Set("Cache-Control", "no-cache")
-	c.Response().Header().Set("Connection", "keep-alive")
-	c.Response().Header().Set("Access-Control-Allow-Origin", "*")
-	c.Response().WriteHeader(http.StatusOK)
+func handleStreaming(ctx echo.Context, req dto.ChatCompletionRequest, data chan string) error {
+	ctx.Response().Header().Set(echo.HeaderContentType, "text/event-stream")
+	ctx.Response().Header().Set("Cache-Control", "no-cache")
+	ctx.Response().Header().Set("Connection", "keep-alive")
+	ctx.Response().Header().Set("Access-Control-Allow-Origin", "*")
+	ctx.Response().WriteHeader(http.StatusOK)
 
 	for msg := range data {
 		chunkResp := dto.ChunkResponse{
@@ -65,17 +65,17 @@ func handleStreaming(c echo.Context, req dto.ChatCompletionRequest, data chan st
 			return err
 		}
 
-		if _, err := fmt.Fprintf(c.Response(), "data: %s\n\n", data); err != nil {
+		if _, err := fmt.Fprintf(ctx.Response(), "data: %s\n\n", data); err != nil {
 			return err
 		}
-		c.Response().Flush()
+		ctx.Response().Flush()
 		time.Sleep(time.Duration(100+rand.Intn(100)) * time.Millisecond)
 	}
 
-	if _, err := c.Response().Write([]byte("data: [DONE]\n\n")); err != nil {
+	if _, err := ctx.Response().Write([]byte("data: [DONE]\n\n")); err != nil {
 		return err
 	}
-	c.Response().Flush()
+	ctx.Response().Flush()
 
 	return nil
 }
