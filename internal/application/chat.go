@@ -58,6 +58,11 @@ func (i *Instance) chat(ctx echo.Context) error {
 			text = "tags_req_" + strconv.FormatInt(time.Now().Unix(), 10)
 		}
 
+        err := apiClient.ChangeTitle(chatSessionId, text)
+        if err != nil {
+        	panic(err)
+        }
+
 		err = i.cache.SetChatData(ctx.Request().Context(), apiKey, req.Messages[0].Content, chatData)
 		if err != nil {
 			panic(err)
