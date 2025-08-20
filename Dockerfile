@@ -25,7 +25,7 @@ RUN --mount=type=cache,target=/go/pkg/mod/ \
 FROM debian:bookworm-slim AS final
 
 RUN apt-get update && \
-    apt-get install -y --no-install-recommends ca-certificates tzdata curl && \
+    apt-get install -y --no-install-recommends libc6 ca-certificates tzdata curl && \
     rm -rf /var/lib/apt/lists/*
 
 ARG UID=10001
