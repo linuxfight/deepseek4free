@@ -1,5 +1,5 @@
 ARG GO_VERSION=1.24
-FROM golang:${GO_VERSION} AS build
+FROM golang:${GO_VERSION}-bookworm AS build
 WORKDIR /src
 
 # install build tools (Debian apt)
