@@ -18,7 +18,12 @@ func main() {
 
 	logger.Info("logger initialized")
 
-	cache, err := kv.New()
+	redisAddr := os.Getenv("REDIS_ADDR")
+	if redisAddr == "" {
+		redisAddr = "localhost:6379"
+	}
+
+	cache, err := kv.New(redisAddr)
 	if err != nil {
 		logger.Fatal("failed to initialize cache", zap.Error(err))
 	}
@@ -35,7 +40,7 @@ func main() {
 
 	logger.Info("app initialized")
 
-	// TODO 2: add logs, traces, metrics
+	// TODO: add logs, traces, metrics
 
 	sigChan := make(chan os.Signal, 1)
 	signal.Notify(sigChan, syscall.SIGINT, syscall.SIGTERM)

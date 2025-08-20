@@ -13,8 +13,8 @@ func (i *Instance) Close() {
 	i.cache.Close()
 }
 
-func New() (*Instance, error) {
-	cache, err := valkey.NewClient(valkey.ClientOption{InitAddress: []string{"127.0.0.1:6379"}})
+func New(redisAddr string) (*Instance, error) {
+	cache, err := valkey.NewClient(valkey.ClientOption{InitAddress: []string{redisAddr}})
 	if err != nil {
 		return nil, err
 	}
