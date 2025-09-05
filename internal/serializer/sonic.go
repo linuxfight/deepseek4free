@@ -5,10 +5,10 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-type SerializerType int
+type TypeNumber int
 
 const (
-	SerializerTypeSonic SerializerType = iota
+	TypeSonic TypeNumber = iota
 )
 
 func New() echo.JSONSerializer {
@@ -20,8 +20,8 @@ func NewWithConfig(config Config) echo.JSONSerializer {
 	return &sonicJSONSerializer{api: config.SonicConfig.Froze()}
 }
 
-func Type() SerializerType {
-	return SerializerTypeSonic
+func Type() TypeNumber {
+	return TypeSonic
 }
 
 // sonicJSONSerializer implements JSON encoding using github.com/bytedance/sonic

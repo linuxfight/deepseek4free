@@ -2,8 +2,9 @@ package api
 
 import (
 	"fmt"
-	"github.com/linuxfight/deepseek4free/pkg/api/models"
 	"net/http"
+
+	"github.com/linuxfight/deepseek4free/pkg/api/models"
 )
 
 // CreateChat is a method to create a new chat session. Returns UUID of a new chat session.

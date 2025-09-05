@@ -1,8 +1,10 @@
 package api
 
 import (
-	"github.com/linuxfight/deepseek4free/pkg/solver"
+	"crypto/tls"
 	"net/http"
+
+	"github.com/linuxfight/deepseek4free/pkg/solver"
 )
 
 const chatCreateBody = `{"agent":"chat"}`
@@ -27,8 +29,17 @@ type Client struct {
 // New is a method to create a new DeepSeek mobile API client. If ApiKey is "", you would need to log in.
 func New(powSolver *solver.Instance, apiKey string) *Client {
 	return &Client{
-		ApiKey:     apiKey,
-		powSolver:  powSolver,
-		httpClient: &http.Client{},
+		ApiKey:    apiKey,
+		powSolver: powSolver,
+		httpClient: &http.Client{
+			Transport: &http.Transport{
+				TLSClientConfig: &tls.Config{
+					CipherSuites: []uint16{
+						tls.TLS_AES_256_GCM_SHA384,
+					},
+					MinVersion: tls.VersionTLS13,
+				},
+			},
+		},
 	}
 }

@@ -2,11 +2,12 @@ package api
 
 import (
 	"bytes"
-	"github.com/bytedance/sonic"
-	"github.com/linuxfight/deepseek4free/pkg/api/models"
 	"io"
 	"net/http"
 	"strconv"
+
+	"github.com/bytedance/sonic"
+	"github.com/linuxfight/deepseek4free/pkg/api/models"
 )
 
 func (c *Client) Completion(chatSessionId, parentMessage, prompt string, think, search bool, response chan string) error {

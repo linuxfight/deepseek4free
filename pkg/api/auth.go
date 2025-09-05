@@ -2,8 +2,9 @@ package api
 
 import (
 	"fmt"
-	"github.com/linuxfight/deepseek4free/pkg/api/models"
 	"net/http"
+
+	"github.com/linuxfight/deepseek4free/pkg/api/models"
 )
 
 // Login is a method to get an API token with credentials

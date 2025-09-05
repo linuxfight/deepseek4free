@@ -1,13 +1,14 @@
 package main
 
 import (
+	"os"
+	"os/signal"
+	"syscall"
+
 	"github.com/linuxfight/deepseek4free/internal/application"
 	"github.com/linuxfight/deepseek4free/internal/kv"
 	"github.com/linuxfight/deepseek4free/pkg/solver"
 	"go.uber.org/zap"
-	"os"
-	"os/signal"
-	"syscall"
 )
 
 func main() {

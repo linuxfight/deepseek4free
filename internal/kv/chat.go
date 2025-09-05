@@ -4,10 +4,11 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"github.com/valkey-io/valkey-go"
 	"hash/fnv"
 	"strconv"
 	"strings"
+
+	"github.com/valkey-io/valkey-go"
 )
 
 type ChatData struct {

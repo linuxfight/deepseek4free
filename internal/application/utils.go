@@ -2,12 +2,13 @@ package application
 
 import (
 	"fmt"
-	"github.com/bytedance/sonic"
-	"github.com/labstack/echo/v4"
-	"github.com/linuxfight/deepseek4free/internal/dto"
 	"math/rand"
 	"net/http"
 	"time"
+
+	"github.com/bytedance/sonic"
+	"github.com/labstack/echo/v4"
+	"github.com/linuxfight/deepseek4free/internal/dto"
 )
 
 func handleNonStreaming(ctx echo.Context, req dto.ChatCompletionRequest, data chan string) error {

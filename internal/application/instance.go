@@ -2,6 +2,8 @@ package application
 
 import (
 	"context"
+	"net/http"
+
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 	"github.com/linuxfight/deepseek4free/internal/kv"
@@ -9,7 +11,6 @@ import (
 	"github.com/linuxfight/deepseek4free/internal/serializer"
 	"github.com/linuxfight/deepseek4free/pkg/solver"
 	"go.uber.org/zap"
-	"net/http"
 )
 
 type Instance struct {

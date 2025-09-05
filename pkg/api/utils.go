@@ -5,11 +5,12 @@ import (
 	"compress/gzip"
 	"encoding/base64"
 	"fmt"
-	"github.com/bytedance/sonic"
-	"github.com/linuxfight/deepseek4free/pkg/api/models"
 	"io"
 	"net/http"
 	"strings"
+
+	"github.com/bytedance/sonic"
+	"github.com/linuxfight/deepseek4free/pkg/api/models"
 )
 
 // unmarshal is a utility method to parse json body with sonic
@@ -37,7 +38,7 @@ func (c *Client) unmarshal(body io.ReadCloser, val interface{}) error {
 
 // applyHeaders is a utility method to apply request headers, that bypass cloudflare, add auth and etc
 func (c *Client) applyHeaders(req *http.Request, bodyLen int) {
-	req.Header.Set("User-Agent", "DeepSeek/1.2.1 Android/30")
+	req.Header.Set("User-Agent", "DeepSeek/1.3.3 Android/30")
 	req.Header.Set("Content-Type", "application/json")
 	if bodyLen > 0 {
 		req.Header.Set("Content-Length", fmt.Sprintf("%d", bodyLen))
@@ -48,8 +49,8 @@ func (c *Client) applyHeaders(req *http.Request, bodyLen int) {
 	req.Header.Set("Accept", "application/json")
 	req.Header.Set("Accept-Encoding", "gzip")
 	req.Header.Set("Accept-Charset", "UTF-8")
-	req.Header.Set("X-Client-Locale", "en")
-	req.Header.Set("X-Client-Version", "1.2.1")
+	req.Header.Set("X-Client-Locale", "en_US")
+	req.Header.Set("X-Client-Version", "1.3.3")
 	req.Header.Set("X-Client-Platform", "android")
 }
 
