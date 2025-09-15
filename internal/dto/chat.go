@@ -1,9 +1,14 @@
 package dto
 
 type ChatCompletionRequest struct {
-	Model    string    `json:"model"`
-	Messages []Message `json:"messages"`
-	Stream   bool      `json:"stream"`
+	Model         string    `json:"model"`
+	Messages      []Message `json:"messages"`
+	Stream        bool      `json:"stream"`
+	HasImages     bool      `json:"return_images"`
+	Temperature   float64   `json:"temperature"`
+	SearchOptions struct {
+		ContextSize string `json:"search_context_size"`
+	} `json:"web_search_options"`
 }
 
 type Message struct {
