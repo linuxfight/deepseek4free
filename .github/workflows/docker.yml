@@ -17,6 +17,10 @@ env:
 
 jobs:
   test:
+    concurrency:
+      group: test-${{ github.ref }}
+      cancel-in-progress: true
+
     name: Test
     runs-on: ubuntu-latest
 
@@ -36,6 +40,10 @@ jobs:
           working-directory: .
 
   build:
+    concurrency:
+      group: build-${{ github.ref }}
+      cancel-in-progress: true
+
     name: Docker
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main'
