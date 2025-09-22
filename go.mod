@@ -6,7 +6,7 @@ require (
 	github.com/bytecodealliance/wasmtime-go/v35 v35.0.0
 	github.com/bytedance/sonic v1.14.1
 	github.com/labstack/echo/v4 v4.13.4
-	github.com/valkey-io/valkey-go v1.0.64
+	github.com/valkey-io/valkey-go v1.0.65
 	go.uber.org/zap v1.27.0
 )
 
