@@ -7,7 +7,7 @@ require (
 	github.com/bytedance/sonic v1.14.1
 	github.com/labstack/echo/v4 v4.13.4
 	github.com/valkey-io/valkey-go v1.0.66
-	go.uber.org/zap v1.27.0
+	go.uber.org/zap v1.27.1
 )
 
 require (
