@@ -1,12 +1,12 @@
 module github.com/linuxfight/deepseek4free
 
-go 1.24
+go 1.24.9
 
 require (
 	github.com/bytecodealliance/wasmtime-go/v35 v35.0.0
 	github.com/bytedance/sonic v1.14.1
 	github.com/labstack/echo/v4 v4.13.4
-	github.com/valkey-io/valkey-go v1.0.66
+	github.com/valkey-io/valkey-go v1.0.70
 	go.uber.org/zap v1.27.0
 )
 
@@ -23,9 +23,9 @@ require (
 	github.com/valyala/fasttemplate v1.2.2 // indirect
 	go.uber.org/multierr v1.10.0 // indirect
 	golang.org/x/arch v0.17.0 // indirect
-	golang.org/x/crypto v0.38.0 // indirect
-	golang.org/x/net v0.40.0 // indirect
-	golang.org/x/sys v0.33.0 // indirect
-	golang.org/x/text v0.25.0 // indirect
+	golang.org/x/crypto v0.46.0 // indirect
+	golang.org/x/net v0.48.0 // indirect
+	golang.org/x/sys v0.39.0 // indirect
+	golang.org/x/text v0.32.0 // indirect
 	golang.org/x/time v0.11.0 // indirect
 )
